@@ -33,7 +33,7 @@ class _MyHomePageState extends State<MyHomePage> {
   String operation;
   int _operandfirst = 0;
   int _operandsecond = 0;
-  int _operationresult = 0;
+  String _operationresult;
   int _opint = 0;
   var rng = new Random();
   final TextEditingController _controller = new TextEditingController();
@@ -47,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
             operation = 'square';
             _operandfirst = rng.nextInt(30) + 2;
             _operandsecond = 2;
-            _operationresult = _operandfirst * _operandfirst;
+            _operationresult = (_operandfirst * _operandfirst).toString();
             break;
           }
         case 1:
@@ -55,7 +55,7 @@ class _MyHomePageState extends State<MyHomePage> {
             operation = 'square';
             _operandfirst = rng.nextInt(30) + 2;
             _operandsecond = 2;
-            _operationresult = _operandfirst * _operandfirst;
+            _operationresult = (_operandfirst * _operandfirst).toString();
             break;
           }
         case 2:
@@ -63,7 +63,19 @@ class _MyHomePageState extends State<MyHomePage> {
             operation = 'cube';
             _operandfirst = rng.nextInt(10) + 2;
             _operandsecond = 3;
-            _operationresult = _operandfirst * _operandfirst * _operandfirst;
+            _operationresult =
+                (_operandfirst * _operandfirst * _operandfirst).toString();
+            break;
+          }
+        case 3:
+          {
+            operation = 'fraction';
+            _operandfirst = rng.nextInt(28) + 2;
+            _operandsecond = 3;
+            double _percentage = (10000 / _operandfirst);
+            _operationresult =
+                (((_percentage.round()).toDouble()) / 100).toString();
+            print(_operationresult);
             break;
           }
         default:
@@ -71,7 +83,7 @@ class _MyHomePageState extends State<MyHomePage> {
             operation = '×';
             _operandfirst = rng.nextInt(30) + 2;
             _operandsecond = rng.nextInt(20) + 2;
-            _operationresult = _operandfirst * _operandsecond;
+            _operationresult = (_operandfirst * _operandsecond).toString();
             break;
           }
       }
@@ -104,20 +116,22 @@ class _MyHomePageState extends State<MyHomePage> {
                         ? '$_operandfirst' + '²'
                         : _opint == 2
                             ? '$_operandfirst' + '³'
-                            : '$_operandfirst × $_operandsecond',
+                            : _opint == 3
+                                ? 'Reciprocal of $_operandfirst in %age'
+                                : '$_operandfirst × $_operandsecond',
                 style: Theme.of(context).textTheme.display1,
               ),
               TextField(
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(borderSide: BorderSide(color: Colors.black) ),
+                  border: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.black)),
                   labelText: 'Answer',
-                  
                 ),
                 textAlign: TextAlign.center,
                 keyboardType: TextInputType.numberWithOptions(decimal: true),
                 controller: _controller,
                 onChanged: (String value) async {
-                  if (value != '${_operationresult.toString()}') {
+                  if (value != '$_operationresult') {
                     return;
                   } else {
                     _controller.clear();
