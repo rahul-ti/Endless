@@ -119,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             : _opint == 3
                                 ? 'Reciprocal of $_operandfirst in %age'
                                 : '$_operandfirst × $_operandsecond',
-                style: Theme.of(context).textTheme.display1,
+                style: Theme.of(context).textTheme.headline4,
               ),
               TextField(
                 decoration: InputDecoration(
