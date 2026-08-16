@@ -13,12 +13,33 @@ The app has no backend, database, environment variables, accounts, or third-part
 
 ## Local setup
 
-Install the current stable Flutter SDK, then run from this directory:
+Install Flutter 3.47.0 (which includes Dart 3.13.0), then run from this
+directory:
 
 ```sh
 flutter pub get
 flutter run -d chrome
 ```
+
+## Android debug APK
+
+The verified Android toolchain is Flutter 3.47.0, Dart 3.13.0, JDK 17,
+Android SDK/API 36, and Android Build Tools 36.0.0. Confirm it with:
+
+```sh
+flutter doctor -v
+```
+
+Build a debug APK with:
+
+```sh
+flutter build apk --debug
+```
+
+The resulting APK is at
+`build/app/outputs/flutter-apk/app-debug.apk`. It is intended for direct
+testing; Play Store distribution requires a separately signed release AAB and
+upload key.
 
 Useful verification commands:
 
@@ -28,4 +49,5 @@ flutter test
 flutter build web
 ```
 
-Run `flutter doctor -v` to inspect optional platform tooling. Android builds require Android Studio and an Android SDK. iOS builds require a full Xcode installation and CocoaPods.
+Android builds require Android Studio and an Android SDK. iOS builds require a
+full Xcode installation and CocoaPods.

@@ -11,6 +11,11 @@ void main() {
       (randomValues: [1, 3], prompt: '5²', answer: '25'),
       (randomValues: [2, 4], prompt: '6³', answer: '216'),
       (randomValues: [3, 2], prompt: 'Reciprocal of 4 in %age', answer: '25.0'),
+      (
+        randomValues: [3, 1],
+        prompt: 'Reciprocal of 3 in %age',
+        answer: '33.33',
+      ),
       (randomValues: [4, 3, 5], prompt: '5 × 7', answer: '35'),
     ];
 
