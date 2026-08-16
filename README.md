@@ -1,28 +1,31 @@
-# endless
+# Endless Arithmetic
 
-A new Flutter project.
+Endless Arithmetic is a small Flutter practice app for mental-math topics commonly used in Indian MBA competitive exams. It continuously generates multiplication, square, cube, and reciprocal-percentage questions. Entering the exact correct answer clears the field and immediately loads the next question.
 
-## Getting Started
+## Project shape
 
-This project is a starting point for a Flutter application.
+- `lib/main.dart` contains the question generator and the complete UI.
+- `test/widget_test.dart` covers every question type and the answer-to-next-question flow.
+- `web/` is the generated Flutter web runner used for the quickest local setup.
+- `android/` and `ios/` contain the original mobile runners; their platform SDKs are optional for web development.
 
-The application was created to test basic arithmetic, often the starting point of some Indian MBA Competitive Exams.
+The app has no backend, database, environment variables, accounts, or third-party runtime packages.
 
-Tests multiplication, squares, cubes and reciprocal.
+## Local setup
 
-## Going through some problems
+Install the current stable Flutter SDK, then run from this directory:
 
+```sh
+flutter pub get
+flutter run -d chrome
+```
 
-https://user-images.githubusercontent.com/37097240/115156656-f88bf500-a0a2-11eb-9395-2e50c82900ce.mp4
+Useful verification commands:
 
+```sh
+flutter analyze
+flutter test
+flutter build web
+```
 
-
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Run `flutter doctor -v` to inspect optional platform tooling. Android builds require Android Studio and an Android SDK. iOS builds require a full Xcode installation and CocoaPods.

@@ -1,103 +1,120 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
 
-void main() => runApp(MyApp());
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class ArithmeticQuestion {
+  const ArithmeticQuestion._({required this.prompt, required this.answer});
+
+  factory ArithmeticQuestion.generate(Random random) {
+    final operation = random.nextInt(105) % 7;
+
+    switch (operation) {
+      case 0:
+      case 1:
+        final operand = random.nextInt(30) + 2;
+        return ArithmeticQuestion._(
+          prompt: '$operand²',
+          answer: (operand * operand).toString(),
+        );
+      case 2:
+        final operand = random.nextInt(10) + 2;
+        return ArithmeticQuestion._(
+          prompt: '$operand³',
+          answer: (operand * operand * operand).toString(),
+        );
+      case 3:
+        final operand = random.nextInt(28) + 2;
+        final percentage = 10000 / operand;
+        final answer = percentage.roundToDouble() / 100;
+        return ArithmeticQuestion._(
+          prompt: 'Reciprocal of $operand in %age',
+          answer: answer.toString(),
+        );
+      default:
+        final firstOperand = random.nextInt(30) + 2;
+        final secondOperand = random.nextInt(20) + 2;
+        return ArithmeticQuestion._(
+          prompt: '$firstOperand × $secondOperand',
+          answer: (firstOperand * secondOperand).toString(),
+        );
+    }
+  }
+
+  final String prompt;
+  final String answer;
+}
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key, this.random});
+
+  final Random? random;
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'Endless Arithmetic',
       theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: AppBarTheme().copyWith(
-          iconTheme: IconThemeData(color: Colors.black, size: 24.0),
-          color: Colors.white,
-          elevation: 0.0,
-        ),
         brightness: Brightness.light,
+        scaffoldBackgroundColor: Colors.white,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          iconTheme: IconThemeData(color: Colors.black, size: 24),
+        ),
       ),
-      home: MyHomePage(),
+      home: MyHomePage(random: random),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
+  const MyHomePage({super.key, this.random});
+
+  final Random? random;
 
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String operation;
-  int _operandfirst = 0;
-  int _operandsecond = 0;
-  String _operationresult;
-  int _opint = 0;
-  var rng = new Random();
-  final TextEditingController _controller = new TextEditingController();
-  void _incrementCounter() {
+  final TextEditingController _controller = TextEditingController();
+  late final Random _random;
+  late ArithmeticQuestion _question;
+
+  @override
+  void initState() {
+    super.initState();
+    _random = widget.random ?? Random();
+    _question = ArithmeticQuestion.generate(_random);
+  }
+
+  void _handleAnswerChanged(String value) {
+    if (value != _question.answer) {
+      return;
+    }
+
+    _controller.clear();
     setState(() {
-      _opint = ((rng.nextInt(105)) % 7);
-      print('$_opint');
-      switch (_opint) {
-        case 0:
-          {
-            operation = 'square';
-            _operandfirst = rng.nextInt(30) + 2;
-            _operandsecond = 2;
-            _operationresult = (_operandfirst * _operandfirst).toString();
-            break;
-          }
-        case 1:
-          {
-            operation = 'square';
-            _operandfirst = rng.nextInt(30) + 2;
-            _operandsecond = 2;
-            _operationresult = (_operandfirst * _operandfirst).toString();
-            break;
-          }
-        case 2:
-          {
-            operation = 'cube';
-            _operandfirst = rng.nextInt(10) + 2;
-            _operandsecond = 3;
-            _operationresult =
-                (_operandfirst * _operandfirst * _operandfirst).toString();
-            break;
-          }
-        case 3:
-          {
-            operation = 'fraction';
-            _operandfirst = rng.nextInt(28) + 2;
-            _operandsecond = 3;
-            double _percentage = (10000 / _operandfirst);
-            _operationresult =
-                (((_percentage.round()).toDouble()) / 100).toString();
-            print(_operationresult);
-            break;
-          }
-        default:
-          {
-            operation = '×';
-            _operandfirst = rng.nextInt(30) + 2;
-            _operandsecond = rng.nextInt(20) + 2;
-            _operationresult = (_operandfirst * _operandsecond).toString();
-            break;
-          }
-      }
+      _question = ArithmeticQuestion.generate(_random);
     });
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    _incrementCounter();
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
-            "Endless Arithmetic",
+          title: const Text(
+            'Endless Arithmetic',
             style: TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.normal,
@@ -110,35 +127,23 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                _opint == 0
-                    ? '$_operandfirst' + '²'
-                    : _opint == 1
-                        ? '$_operandfirst' + '²'
-                        : _opint == 2
-                            ? '$_operandfirst' + '³'
-                            : _opint == 3
-                                ? 'Reciprocal of $_operandfirst in %age'
-                                : '$_operandfirst × $_operandsecond',
-                style: Theme.of(context).textTheme.headline4,
+                _question.prompt,
+                style: Theme.of(context).textTheme.headlineMedium,
               ),
               TextField(
-                decoration: InputDecoration(
+                controller: _controller,
+                decoration: const InputDecoration(
                   border: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.black)),
+                    borderSide: BorderSide(color: Colors.black),
+                  ),
                   labelText: 'Answer',
                 ),
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                ),
                 textAlign: TextAlign.center,
-                keyboardType: TextInputType.numberWithOptions(decimal: true),
-                controller: _controller,
-                onChanged: (String value) async {
-                  if (value != '$_operationresult') {
-                    return;
-                  } else {
-                    _controller.clear();
-                    _incrementCounter();
-                  }
-                },
-              )
+                onChanged: _handleAnswerChanged,
+              ),
             ],
           ),
         ),
